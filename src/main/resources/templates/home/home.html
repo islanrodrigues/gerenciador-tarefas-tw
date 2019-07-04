@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="https://thymeleaf.org">
 	<head>
 		<meta charset="UTF-8">	
 		<title>Página Inicial</title>
@@ -7,5 +7,6 @@
 	
 	<body>
 		<p>Olá! Seja bem-vindo ao Gerenciador de Tarefas!</p>
+		<p th:text="${mensagem}"></p>
 	</body>
 </html>
