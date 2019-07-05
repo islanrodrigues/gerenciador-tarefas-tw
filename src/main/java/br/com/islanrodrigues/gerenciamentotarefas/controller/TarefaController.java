@@ -14,6 +14,7 @@ import br.com.islanrodrigues.gerenciamentotarefas.model.Tarefa;
 import br.com.islanrodrigues.gerenciamentotarefas.repository.TarefaRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -60,6 +61,44 @@ public class TarefaController {
 				
 		if (result.hasErrors()) {
 			model.setViewName("tarefas/inserir");
+			model.addObject(tarefa);
+		
+		} else {
+			repository.save(tarefa);
+			model.setViewName("redirect:/tarefas/listar");
+		}
+		
+		return model;
+	}
+	
+	
+	@GetMapping("/alterar/{id}")
+	public ModelAndView alterar(@PathVariable("id") Long id) {
+		ModelAndView model = new ModelAndView();
+		
+		Tarefa tarefa = repository.getOne(id);
+		model.setViewName("tarefas/alterar");
+		model.addObject("tarefa", tarefa);
+		
+		return model;
+	}
+	
+	
+	@PostMapping("/alterar")
+	public ModelAndView alterar(@Valid Tarefa tarefa, BindingResult result) {
+		ModelAndView model = new ModelAndView();
+		
+		if (tarefa.getDataExpiracao() == null) {
+			result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração é obrigatória");
+		
+		} else {
+			if (tarefa.getDataExpiracao().before(new Date())) {
+				result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração não pode ser anterior à data atual");
+			}			
+		}
+				
+		if (result.hasErrors()) {
+			model.setViewName("tarefas/alterar");
 			model.addObject(tarefa);
 		
 		} else {
