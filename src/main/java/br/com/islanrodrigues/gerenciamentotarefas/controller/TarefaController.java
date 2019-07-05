@@ -9,6 +9,7 @@ import br.com.islanrodrigues.gerenciamentotarefas.model.Tarefa;
 import br.com.islanrodrigues.gerenciamentotarefas.repository.TarefaRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -36,6 +37,14 @@ public class TarefaController {
 		model.addObject("tarefa", new Tarefa());
 		
 		return model;
+	}
+	
+	
+	@PostMapping("/inserir")
+	public String inserir(Tarefa tarefa) {
+		repository.save(tarefa);
+		
+		return "redirect:/tarefas/listar";
 	}
 	
 }
