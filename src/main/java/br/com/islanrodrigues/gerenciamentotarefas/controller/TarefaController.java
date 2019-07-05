@@ -1,7 +1,12 @@
 package br.com.islanrodrigues.gerenciamentotarefas.controller;
 
+import java.util.Date;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,10 +46,28 @@ public class TarefaController {
 	
 	
 	@PostMapping("/inserir")
-	public String inserir(Tarefa tarefa) {
-		repository.save(tarefa);
+	public ModelAndView inserir(@Valid Tarefa tarefa, BindingResult result) {
+		ModelAndView model = new ModelAndView();
 		
-		return "redirect:/tarefas/listar";
+		if (tarefa.getDataExpiracao() == null) {
+			result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração é obrigatória");
+		
+		} else {
+			if (tarefa.getDataExpiracao().before(new Date())) {
+				result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração não pode ser anterior à data atual");
+			}			
+		}
+				
+		if (result.hasErrors()) {
+			model.setViewName("tarefas/inserir");
+			model.addObject(tarefa);
+		
+		} else {
+			repository.save(tarefa);
+			model.setViewName("redirect:/tarefas/listar");
+		}
+		
+		return model;
 	}
 	
 }
