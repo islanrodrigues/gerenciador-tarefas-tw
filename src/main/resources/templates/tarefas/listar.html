@@ -19,7 +19,9 @@
 				</div>
 				<div class="card-footer bg-light">
 					<p>
-						<a th:href="@{/tarefas/alterar/{id}(id = ${tarefa.id})}" class="btn btn-warning">Alterar</a>
+						<a th:if="${!tarefa.concluida}" th:href="@{/tarefas/concluir/{id}(id = ${tarefa.id})}" class="btn btn-primary">Concluir</a>
+						<a th:href="@{/tarefas/alterar/{id}(id = ${tarefa.id})}" class="btn btn-warning">Alterar</a>						
+						<a th:href="@{/tarefas/excluir/{id}(id = ${tarefa.id})}" class="btn btn-danger">Excluir</a>
 					</p>
 				</div>
 			</div>
