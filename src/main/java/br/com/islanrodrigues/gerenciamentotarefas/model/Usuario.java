@@ -2,6 +2,8 @@ package br.com.islanrodrigues.gerenciamentotarefas.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -16,12 +18,14 @@ public class Usuario {
 	@Column(name = "usr_id")
 	private Long id;
 	
+	@NotNull(message = "O e-mail é obrigatório.")
+	@Size(min = 5, max = 100, message = "O e-mail deve conter entre 5 e 100 caracteres.")
 	@Column(name = "usr_email", nullable = false, length = 100)
 	private String email;
 	
+	@NotNull(message = "A senha é obrigatória.")
 	@Column(name = "usr_senha", nullable = false, length = 100)
 	private String senha;
-
 	
 	
 	//-- GETTERS AND SETTERS --
