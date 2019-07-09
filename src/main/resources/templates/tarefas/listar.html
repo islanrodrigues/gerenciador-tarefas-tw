@@ -15,7 +15,9 @@
 				<div class="card-header" th:text="${tarefa.titulo}"></div>
 				<div class="card-body">
 					<p class="card-text" th:text="${tarefa.descricao}"></p>
-					<p class="card-text" th:text="${'Data de Expiração: ' + #dates.format(tarefa.dataExpiracao, 'dd/MM/yyyy')}"></p>					
+					<p class="card-text" th:text="${'Data de Expiração: ' + #dates.format(tarefa.dataExpiracao, 'dd/MM/yyyy')}"></p>
+					<p style="color:green; font-weight: bold" th:if="${tarefa.dataExpiracao.after(new java.util.Date())}">Em dias</p>	
+					<p style="color:red; font-weight: bold" th:if="${tarefa.dataExpiracao.before(new java.util.Date())}">Atrasada</p>					
 				</div>
 				<div class="card-footer bg-light">
 					<p>
