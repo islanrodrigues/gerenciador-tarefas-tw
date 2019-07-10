@@ -1,11 +1,16 @@
 package br.com.islanrodrigues.gerenciamentotarefas.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -26,6 +31,9 @@ public class Usuario {
 	@NotNull(message = "A senha é obrigatória.")
 	@Column(name = "usr_senha", nullable = false, length = 100)
 	private String senha;
+	
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+	private List<Tarefa> tarefas;
 	
 	
 	//-- GETTERS AND SETTERS --
@@ -56,4 +64,14 @@ public class Usuario {
 		this.senha = senha;
 	}
 	
+	
+	public List<Tarefa> getTarefas() {
+		return this.tarefas;
+	}
+	
+	public void setTarefas(List<Tarefa> tarefas) {
+		this.tarefas = tarefas;
+	}
+	
 }
+

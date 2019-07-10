@@ -3,8 +3,11 @@ package br.com.islanrodrigues.gerenciamentotarefas.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
@@ -38,6 +41,10 @@ public class Tarefa {
 	
 	@Column(name = "tar_concluida", nullable = false)
 	private Boolean concluida = false;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "usr_id")
+	private Usuario usuario;
 	
 	
 	//--- GETTERS AND SETTERS ---
