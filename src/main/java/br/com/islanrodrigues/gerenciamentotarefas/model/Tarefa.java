@@ -93,6 +93,13 @@ public class Tarefa {
 	}
 	
 	
+	public Usuario getUsuario() {
+		return this.usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 	
 
 }

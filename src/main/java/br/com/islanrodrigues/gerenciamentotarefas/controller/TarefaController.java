@@ -2,6 +2,7 @@ package br.com.islanrodrigues.gerenciamentotarefas.controller;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.islanrodrigues.gerenciamentotarefas.model.Tarefa;
+import br.com.islanrodrigues.gerenciamentotarefas.model.Usuario;
 import br.com.islanrodrigues.gerenciamentotarefas.repository.TarefaRepository;
+import br.com.islanrodrigues.gerenciamentotarefas.service.UsuarioService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +28,16 @@ public class TarefaController {
 	@Autowired
 	private TarefaRepository repository;
 	
+	@Autowired
+	private UsuarioService usuarioService;
+	
 	
 	@GetMapping("/listar")
-	public ModelAndView listarTarefas() {
+	public ModelAndView listarTarefas(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("tarefas/listar");
-		model.addObject("tarefas", repository.findAll()); 
+		String emailUsuario = request.getUserPrincipal().getName();
+		model.addObject("tarefas", repository.buscarTarefasPorUsuario(emailUsuario)); 
 		
 		return model;
 	}
@@ -47,7 +54,7 @@ public class TarefaController {
 	
 	
 	@PostMapping("/inserir")
-	public ModelAndView inserir(@Valid Tarefa tarefa, BindingResult result) {
+	public ModelAndView inserir(@Valid Tarefa tarefa, BindingResult result, HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
 		
 		if (tarefa.getDataExpiracao() == null) {
@@ -64,7 +71,11 @@ public class TarefaController {
 			model.addObject(tarefa);
 		
 		} else {
+			String emailUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioLogado = usuarioService.buscarPorEmail(emailUsuario);
+			tarefa.setUsuario(usuarioLogado);			
 			repository.save(tarefa);
+			
 			model.setViewName("redirect:/tarefas/listar");
 		}
 		
